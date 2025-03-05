@@ -1,6 +1,8 @@
+using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CollisionController : MonoBehaviour
 {
@@ -14,9 +16,23 @@ public class CollisionController : MonoBehaviour
     public AudioClip collisionAudio;
     private AudioSource audioSource;
 
+    public TMPro.TMP_Text scoreUI;
+
+    public int increaseScore = 1;
+    public int decreaseScore = 1;
+
+    private int score = 0;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+    }
+    void Update()
+    {
+        if (scoreUI != null)
+        {
+            scoreUI.text = score.ToString();
+        }
     }
 
     // only for GameObjects with a mesh, box, or other collider except for character controller and wheel colliders
@@ -32,6 +48,14 @@ public class CollisionController : MonoBehaviour
 
         if(destroyEnemy == true && other.gameObject.tag == "Enemy" || destroyCollectibles == true && other.gameObject.tag == "Collectible"){
             Destroy(other.gameObject);
+        }
+        if (scoreUI != null && other.gameObject.tag == "Collectible")
+        {
+            score += increaseScore;
+        }
+        if (scoreUI != null && other.gameObject.tag == "Enemy")
+        {
+            score -= decreaseScore;
         }
     }
 
@@ -69,6 +93,14 @@ public class CollisionController : MonoBehaviour
         if (destroyEnemy == true && hit.gameObject.tag == "Enemy" || destroyCollectibles == true && hit.gameObject.tag == "Collectible")
         {
             Destroy(hit.gameObject);
+        }
+        if (scoreUI != null && hit.gameObject.tag == "Collectible")
+        {
+            score += increaseScore;
+        }
+        if (scoreUI != null && hit.gameObject.tag == "Enemy")
+        {
+            score -= decreaseScore;
         }
     }
 }
